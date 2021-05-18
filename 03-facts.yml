@@ -1,0 +1,7 @@
+- name: Demo on using facts  
+  hosts: all 
+# gather_facts: False
+  tasks: 
+    - name: Print the inBuild Variable 
+      debug:
+         msg: "{{ ansible_distribution }}"

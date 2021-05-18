@@ -1,0 +1,5 @@
+- name: Playbook to set up Web and App Server  
+  hosts: localhost    
+  become: yes 
+  roles: 
+    - appserver

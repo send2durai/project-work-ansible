@@ -1,0 +1,30 @@
+- name: Play1 
+  hosts: all 
+  tasks:
+    - name: Pring the file system of the remote nodes 
+      shell: df -h  
+      register: OUT 
+    
+    - name: Printing the df output
+      debug:
+         msg: "{{ OUT.stdout }}"   
+
+    - name:
+      debug:
+         msg: Hello and welcome to playbook learning and this from Play1  
+        
+
+- name: Play2
+  hosts: all 
+  tasks:
+    - name: Pring the file system of the remote nodes 
+      shell: uptime
+      register: OUT 
+
+    - name: Printing the uptime output
+      debug:
+         msg: "{{ OUT.stdout }}"   
+
+    - name:
+      debug:
+         msg: Hello and welcome to playbook learning and this from Play2         

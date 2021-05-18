@@ -1,0 +1,64 @@
+- name: Creating the APP User 
+  ansible.builtin.user:
+    name: "{{ FUSER }}"
+    comment: Student-Functional-User
+
+- name: Installing Java 
+  ansible.builtin.package:
+    name: java 
+    state: present 
+
+- name: Download and unarchive the tomcat
+  ansible.builtin.unarchive:
+    src: "{{ TOMCAT_URL }}"
+    dest: "{{ FUSER_HOME }}"
+    remote_src: yes
+  become_user: "{{ FUSER }}"
+
+- name: Remove file (delete file)
+  ansible.builtin.file:
+    path: "{{ FUSER_HOME }}/apache-tomcat-8.5.66/webapps/student.war"
+    state: absent
+  ignore_errors: yes 
+
+- name: Downloading Student Artifact 
+  get_url:
+    url: "{{ STUDENT_WAR }}"
+    dest: "{{ FUSER_HOME }}/apache-tomcat-8.5.66/webapps/student.war"
+    mode: '0775'
+  become_user: "{{ FUSER }}"
+  register: OUT 
+
+- name: Acceptance Criteria on the Old Artifact Deletion 
+  debug: 
+    msg: Exit Code of previous deletion is {{ OUT }}
+  
+
+- name: Downloading SQL Connector
+  get_url:
+    url: "{{ SQL_JAR }}"
+    dest: "{{ FUSER_HOME }}/apache-tomcat-8.5.66/lib/mysql-connector.jar"
+    mode: '0775'
+  become_user: "{{ FUSER }}"
+
+- name: Copy the context file 
+  ansible.builtin.template:
+    src: context.xml 
+    dest: "{{ FUSER_HOME }}/apache-tomcat-8.5.66/conf/context.xml"
+    mode: '0775'
+  become_user: "{{ FUSER }}"
+
+- name: Copy the student service file 
+  ansible.builtin.template:
+    src: student.service  
+    dest: "/etc/systemd/system/multi-user.target.wants/student.service"
+    mode: '0775'
+
+- name: Restart Student Service 
+  ansible.builtin.systemd:
+    state: restarted
+    daemon_reload: yes
+    name: student 
+
+- name: Install Node_Exporter 
+  ansible.builtin.shell: curl https://gitlab.com/thecloudcareers/opensource/-/raw/master/prom-node-exporter-install.sh | sudo bash 

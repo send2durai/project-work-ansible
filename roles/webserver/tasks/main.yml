@@ -1,0 +1,24 @@
+- name: Install Httpd Webserver 
+  ansible.builtin.package:
+    name: httpd 
+    state: present 
+
+- name: Copy Proxy file 
+  copy:
+    src: proxy.conf
+    dest: /etc/httpd/conf.d/proxy.conf 
+  notify: Restarts httpd 
+
+- name: Download Index File 
+  get_url:
+    url: "{{ INDEX_URL }}"
+    dest: /var/www/html/index.html
+    mode: '0775'
+  notify: Restarts httpd 
+
+- name: Start httpd service 
+  ansible.builtin.service:
+    name: httpd
+    state: started
+
+

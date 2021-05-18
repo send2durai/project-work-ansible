@@ -1,0 +1,20 @@
+- name: Demo on using Conditions   
+  hosts: all 
+# gather_facts: False
+  vars:
+    epic: false 
+  tasks: 
+    - name: Run this when os is CentoS 
+      debug:
+         msg: This is CentOS 
+      when: ansible_distribution == "CentOS"
+  
+    - name: Run this when os is Ubuntu 
+      debug:
+         msg: This is CentOS 
+      when: ansible_distribution == "Ubuntu" 
+    
+    - name: Running an epic 
+      debug:
+        msg: Hello 
+      when: epic 

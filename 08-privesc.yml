@@ -1,0 +1,12 @@
+- name: Demo on Privilege escalation
+  hosts: all 
+# gather_facts: False
+  tasks: 
+    - name: Run ID
+      shell: id 
+      register: OUT
+      become: yes 
+  
+    - name: Print 
+      debug: 
+        msg: "{{ OUT.stdout }}" 

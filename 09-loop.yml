@@ -1,0 +1,10 @@
+- name: Demo on using loops  
+  hosts: all 
+  tasks: 
+    - name: Print the vars with loop  
+      debug:
+         msg: "value = {{item}}"
+      loop:
+        - "one"
+        - "two"
+        - "CloudCareers"

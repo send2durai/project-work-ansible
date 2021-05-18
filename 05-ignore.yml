@@ -1,0 +1,14 @@
+
+
+- name: Check Tomcat is runnig or not 
+  hosts: all 
+# gather_facts: False
+  tasks: 
+    - name: Checking Tomcat Status  
+      shell: ps -ef | grep java | grep -v grep
+      register: OUT
+      ignore_errors: yes
+    
+    - name: Tomcat Start 
+      debug:
+        msg: Starting Tomcat and result is {{ OUT.rc }}

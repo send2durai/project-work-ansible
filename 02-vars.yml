@@ -1,0 +1,24 @@
+- name: Demo on using variables 
+  hosts: all 
+  vars_files:
+     - demo-vars.yml 
+  vars: 
+     URL: play.google.com 
+  tasks: 
+    - name: Print the url 
+      debug:
+         msg: URL is {{ URL }}   
+
+    - name: Print the url from local 
+      debug:
+         msg: URL is {{ URL }} 
+      vars: 
+         URL: task.google.com 
+#### Local Variables will have highest prcendence than GLOBAL ###
+
+    - name: Print the url from CLI  
+      debug:
+         msg: "{{ CLI_URL }}" 
+
+# When it comes to overriding the precendence is the below
+###  CLI > Local > Global > file variables 

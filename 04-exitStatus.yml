@@ -1,0 +1,15 @@
+- name: Demo on using facts  
+  hosts: all 
+# gather_facts: False
+  tasks: 
+    - name: Execute Uptime 
+      shell: uptime 
+      register: OUT
+         
+    - name: Declare Variable 
+      set_fact:
+         STATUS: "{{ OUT.rc }}"
+    
+    - name: Print Exit Status 
+      debug:
+        msg: Exit status is {{ STATUS }}
